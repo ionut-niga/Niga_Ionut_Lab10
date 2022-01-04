@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Niga_Ionut_Lab10.Models;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Niga_Ionut_Lab10.Models;
+
 
 namespace Niga_Ionut_Lab10
 {
@@ -29,6 +25,22 @@ namespace Niga_Ionut_Lab10
             var slist = (ShopList)BindingContext;
             await App.Database.DeleteShopListAsync(slist);
             await Navigation.PopAsync();
+        }
+        async void OnChooseButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ProductPage((ShopList)
+           this.BindingContext)
+            {
+                BindingContext = new Product()
+            });
+
+        }
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            var shopl = (ShopList)BindingContext;
+
+            listView.ItemsSource = await App.Database.GetListProductsAsync(shopl.ID);
         }
     }
 }
